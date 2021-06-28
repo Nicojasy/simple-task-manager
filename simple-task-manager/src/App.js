@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Tasks from './Pages/Tasks';
+import ExpiringTasks from './Pages/ExpiringTasks';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div>
+                <h2>Welcome to TaskManager</h2>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <ul className="navbar-nav mr-auto">
+                        <li><Link to={'/tasks'} className="nav-link">Tasks</Link></li>
+                        <li><Link to={'/expiring-tasks'} className="nav-link">Expiring tasks</Link></li>
+                    </ul>
+                </nav>
+                <hr />
+                <Switch>
+                    <Route path='/tasks'>
+                        <Tasks/>
+                    </Route>
+                    <Route path='/expiring-tasks'>
+                        <ExpiringTasks/>
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

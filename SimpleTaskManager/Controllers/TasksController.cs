@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SimpleTaskManager.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SimpleTaskManager.Controllers
 {
@@ -11,25 +10,26 @@ namespace SimpleTaskManager.Controllers
     [Route("api/tasks")]
     public class TasksController : ControllerBase
     {
+        private readonly TaskContext _context;
         private readonly ILogger<TasksController> _logger;
 
-        public TasksController(ILogger<TasksController> logger)
+        public TasksController(ILogger<TasksController> logger, TaskContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetTasks()
-        {
-            return Ok();
-        }
+        public IActionResult GetTasks()
+            => Ok(_context.Tasks.ToList());
 
         [HttpGet]
-        [Route("")]
-        public async Task<IActionResult> GetExpiring()
+        [Route("expiring")]
+        public IActionResult GetExpiringTask()
         {
-            return Ok();
+            DateTime now = DateTime.Now;
+            return Ok(_context.Tasks.Where(t => now <= t.endDate && t.endDate <= now.AddHours(2)).ToList());
         }
     }
 }
